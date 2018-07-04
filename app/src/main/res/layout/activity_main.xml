@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,9 +9,23 @@
 
     <Button
         android:layout_width="match_parent"
-        android:text="打开采购"
-        android:onClick="openCaiGou"
         android:layout_height="wrap_content"
+        android:onClick="openCaiGou1"
+        android:text="打开采购方式1"
+        tools:ignore="HardcodedText"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="openCaiGou2"
+        android:text="打开采购方式2"
+        tools:ignore="HardcodedText"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="openCaiGou3"
+        android:text="打开采购方式3"
         tools:ignore="HardcodedText"/>
 
 </LinearLayout>
