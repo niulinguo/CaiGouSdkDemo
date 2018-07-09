@@ -31,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
         openCaiGou(intent);
     }
 
+    public void openCaiGou4(View view) {
+        Intent intent = createIntent4();
+        openCaiGou(intent);
+    }
+
     private void openCaiGou(Intent intent) {
         if (intent == null) {
             Toast.makeText(this, "没有安装采购App(-1)", Toast.LENGTH_SHORT).show();
@@ -67,6 +72,18 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("password", "admin");
         intent.putExtra("server", "192.168.1.1");
         intent.putExtra("port", "8080");
+        return intent;
+    }
+
+    private Intent createIntent4() {
+        final Intent intent = new Intent();
+        intent.setComponent(new ComponentName("com.zhu.procurement", "com.zhu.ec.mainmenu.MainActivity"));
+        intent.putExtra("JSON_RESULT", "{" +
+                "\"user\"=\"admin\"," +
+                "\"password\"=\"admin\"," +
+                "\"server\"=\"192.168.1.1\"," +
+                "\"port\"=\"8080\"" +
+                "}");
         return intent;
     }
 }

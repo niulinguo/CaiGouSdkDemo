@@ -4,13 +4,13 @@
 
 ```
 百度云
-链接:https://pan.baidu.com/s/1EZhF07_MYzD6uXj_PqmP0w
-密码:6tqj
+链接:https://pan.baidu.com/s/1O7ZURpPu98tiQPK_v5C4mw
+密码:qdxa
 ```
 
 ### 使用隐式意图跳转打开主页面
 
-> 提供三种方式进行页面跳转
+> 提供四种方式进行页面跳转
 
 1.
 ``` java
@@ -38,6 +38,19 @@
     intent.putExtra("password", "admin");
     intent.putExtra("server", "192.168.1.1");
     intent.putExtra("port", "8080");
+    return intent;
+```
+
+4.
+``` java
+    final Intent intent = new Intent();
+    intent.setComponent(new ComponentName("com.zhu.procurement", "com.zhu.ec.mainmenu.MainActivity"));
+    intent.putExtra("JSON_RESULT", "{" +
+            "\"user\"=\"admin\"," +
+            "\"password\"=\"admin\"," +
+            "\"server\"=\"192.168.1.1\"," +
+            "\"port\"=\"8080\"" +
+            "}");
     return intent;
 ```
 
