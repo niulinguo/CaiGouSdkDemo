@@ -55,3 +55,12 @@
 ```
 
 请修改意图的四个参数：账号、密码、接口地址和端口号
+
+
+### ReleaseNote
+
+```
+百度云
+链接:https://pan.baidu.com/s/1zWCGM51X7pTJBfHhGtBLrw
+密码:4b31
+```
