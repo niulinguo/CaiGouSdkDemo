@@ -35,4 +35,11 @@
         android:text="打开采购方式4"
         tools:ignore="HardcodedText"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="openCaiGou5"
+        android:text="打开采购方式5"
+        tools:ignore="HardcodedText"/>
+
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.niles.caigousdkdemo;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
@@ -7,6 +8,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void openCaiGou4(View view) {
         Intent intent = createIntent4();
+        openCaiGou(intent);
+    }
+
+    public void openCaiGou5(View view) {
+        Intent intent = createIntent5();
         openCaiGou(intent);
     }
 
@@ -85,5 +98,29 @@ public class MainActivity extends AppCompatActivity {
                 "\"port\"=\"8080\"" +
                 "}");
         return intent;
+    }
+
+    private Intent createIntent5() {
+        try {
+            final JSONObject loginInfo = new JSONObject();
+            loginInfo.put("code", 200);
+            loginInfo.put("message", "demo");
+            @SuppressLint("SimpleDateFormat") final String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+            final String deviceId = UUID.randomUUID().toString();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("user", "admin");
+            jsonObject.put("login_info", loginInfo.toString());
+            jsonObject.put("time", time);
+            jsonObject.put("device_id", deviceId);
+            jsonObject.put("server", "192.168.1.1");
+            jsonObject.put("port", "8080");
+            final Intent intent = new Intent();
+            intent.setComponent(new ComponentName("com.zhu.procurement", "com.zhu.ec.mainmenu.MainActivity"));
+            intent.putExtra("JSON_RESULT", jsonObject.toString());
+            return intent;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

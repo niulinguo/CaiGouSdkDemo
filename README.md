@@ -4,13 +4,13 @@
 
 ```
 百度云
-链接:https://pan.baidu.com/s/1O7ZURpPu98tiQPK_v5C4mw
-密码:qdxa
+链接:https://pan.baidu.com/s/1zSTxkIG6tJXFpsEO9qIiIg
+密码:pysy
 ```
 
 ### 使用隐式意图跳转打开主页面
 
-> 提供四种方式进行页面跳转
+> 提供五种方式进行页面跳转
 
 1.
 ``` java
@@ -51,6 +51,21 @@
             "\"server\"=\"192.168.1.1\"," +
             "\"port\"=\"8080\"" +
             "}");
+    return intent;
+```
+
+5.
+``` java
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("user", "admin");
+    jsonObject.put("login_info", loginInfo.toString());
+    jsonObject.put("time", time);
+    jsonObject.put("device_id", deviceId);
+    jsonObject.put("server", "192.168.1.1");
+    jsonObject.put("port", "8080");
+    final Intent intent = new Intent();
+    intent.setComponent(new ComponentName("com.zhu.procurement", "com.zhu.ec.mainmenu.MainActivity"));
+    intent.putExtra("JSON_RESULT", jsonObject.toString());
     return intent;
 ```
 
