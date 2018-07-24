@@ -4,8 +4,8 @@
 
 ```
 百度云
-链接:https://pan.baidu.com/s/1zMyt_jrfXI_LaFed6QMZ0Q
-密码:9kok
+链接:https://pan.baidu.com/s/1iTh9Aqzxfs7ulpovmVLM8g
+密码:4p90
 ```
 
 ### 使用隐式意图跳转打开主页面
@@ -78,4 +78,20 @@
 百度云
 链接:https://pan.baidu.com/s/1zWCGM51X7pTJBfHhGtBLrw
 密码:4b31
+```
+
+### 升级功能测试方法
+
+1. 下载安卓0.9.28版本app
+2. 将0.9.29版本app上传至蒲公英平台
+3. 打开app进入首页，提示升级
+
+```
+百度云（0.9.28版本）
+链接:https://pan.baidu.com/s/1iTh9Aqzxfs7ulpovmVLM8g
+密码:4p90
+
+百度云（0.9.29版本）
+链接:https://pan.baidu.com/s/1fcQ-IRRJWuLmBXsbSKNEHA
+密码:3uyj
 ```
