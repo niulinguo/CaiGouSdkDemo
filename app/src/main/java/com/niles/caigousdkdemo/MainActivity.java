@@ -47,13 +47,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openCaiGou5(View view) {
-        final String server = "接口地址";
-        final String port = "接口端口";
+        final String protocol = "接口地址";
         final String username = "用户名";
         final String password = "密码";
         final String time = TimeUtils.date2String(new Date());
         final String deviceId = Installation.id(this);
-        OkGo.<String>post("http://" + server + ":" + port + "/auth/login")
+        OkGo.<String>post(protocol + "/auth/login")
                 .params("username", username)
                 .params("password", password)
                 .params("time", time)
@@ -62,13 +61,14 @@ public class MainActivity extends AppCompatActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        Intent intent = createIntent5(server, port, username, response.body(), time, deviceId);
+                        Intent intent = createIntent5(protocol, username, response.body(), time, deviceId);
                         openCaiGou(intent);
                     }
 
                     @Override
                     public void onError(Response<String> response) {
-                        super.onError(response);
+                        Intent intent = createIntent5(protocol, username, response.body(), time, deviceId);
+                        openCaiGou(intent);
                     }
                 });
     }
@@ -124,15 +124,14 @@ public class MainActivity extends AppCompatActivity {
         return intent;
     }
 
-    private Intent createIntent5(String ip, String port, String user, String loginInfo, String time, String deviceId) {
+    private Intent createIntent5(String protocol, String user, String loginInfo, String time, String deviceId) {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("user", user);
             jsonObject.put("login_info", loginInfo);
             jsonObject.put("time", time);
             jsonObject.put("device_id", deviceId);
-            jsonObject.put("server", ip);
-            jsonObject.put("port", port);
+            jsonObject.put("protocol", protocol);
             final Intent intent = new Intent();
             intent.setComponent(new ComponentName("com.zhu.procurement", "com.zhu.ec.mainmenu.MainActivity"));
             intent.putExtra("JSON_RESULT", jsonObject.toString());
