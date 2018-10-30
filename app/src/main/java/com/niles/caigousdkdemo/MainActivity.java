@@ -2,12 +2,13 @@ package com.niles.caigousdkdemo;
 
 import android.content.ComponentName;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -16,6 +17,7 @@ import com.lzy.okgo.model.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,30 +28,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void openCaiGou1(View view) {
-        Intent intent = createIntent1();
-        openCaiGou(intent);
-    }
-
-    public void openCaiGou2(View view) {
-        Intent intent = createIntent2();
-        openCaiGou(intent);
-    }
-
-    public void openCaiGou3(View view) {
-        Intent intent = createIntent3();
-        openCaiGou(intent);
-    }
-
-    public void openCaiGou4(View view) {
-        Intent intent = createIntent4();
-        openCaiGou(intent);
-    }
-
-    public void openCaiGou5(View view) {
-        final String protocol = "接口地址";
-        final String username = "用户名";
-        final String password = "密码";
+    public void openCaiGou(View view) {
+        final String protocol = BuildConfig.SERVER_URL;
+        final String username = BuildConfig.USERNAME;
+        final String password;
+        try {
+            password = Base64.encodeToString(
+                    EncryptUtils.encryptAES(
+                            BuildConfig.PASSWORD.getBytes("UTF-8"),
+                            BuildConfig.AES_PASSWORD.getBytes("UTF-8"),
+                            "AES/CBC/PKCS5Padding",
+                            BuildConfig.AES_IV.getBytes("UTF-8")
+                    ),
+                    Base64.NO_WRAP);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         final String time = TimeUtils.date2String(new Date());
         final String deviceId = Installation.id(this);
         OkGo.<String>post(protocol + "/auth/login")
@@ -84,44 +78,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "没有安装采购App(-2)", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private Intent createIntent1() {
-        final Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("proucrement://user=admin,password=admin,server=192.168.1.1,port=8080"));
-        return intent;
-    }
-
-    private Intent createIntent2() {
-        final Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("proucrement://"));
-        intent.putExtra("user", "admin");
-        intent.putExtra("password", "admin");
-        intent.putExtra("server", "192.168.1.1");
-        intent.putExtra("port", "8080");
-        return intent;
-    }
-
-    private Intent createIntent3() {
-        final Intent intent = new Intent();
-        intent.setComponent(new ComponentName("com.zhu.procurement", "com.zhu.ec.mainmenu.MainActivity"));
-        intent.putExtra("user", "admin");
-        intent.putExtra("password", "admin");
-        intent.putExtra("server", "192.168.1.1");
-        intent.putExtra("port", "8080");
-        return intent;
-    }
-
-    private Intent createIntent4() {
-        final Intent intent = new Intent();
-        intent.setComponent(new ComponentName("com.zhu.procurement", "com.zhu.ec.mainmenu.MainActivity"));
-        intent.putExtra("JSON_RESULT", "{" +
-                "\"user\"=\"admin\"," +
-                "\"password\"=\"admin\"," +
-                "\"server\"=\"192.168.1.1\"," +
-                "\"port\"=\"8080\"" +
-                "}");
-        return intent;
     }
 
     private Intent createIntent5(String protocol, String user, String loginInfo, String time, String deviceId) {

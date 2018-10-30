@@ -10,36 +10,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="openCaiGou1"
-        android:text="打开采购方式1"
-        tools:ignore="HardcodedText"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="openCaiGou2"
-        android:text="打开采购方式2"
-        tools:ignore="HardcodedText"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="openCaiGou3"
-        android:text="打开采购方式3"
-        tools:ignore="HardcodedText"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="openCaiGou4"
-        android:text="打开采购方式4"
-        tools:ignore="HardcodedText"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="openCaiGou5"
-        android:text="打开采购方式5"
+        android:onClick="openCaiGou"
+        android:text="打开采购"
         tools:ignore="HardcodedText"/>
 
 </LinearLayout>
