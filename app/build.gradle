@@ -13,8 +13,6 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-        aaptOptions.cruncherEnabled = false
-        aaptOptions.useNewCruncher = false
 
         buildConfigField 'String', 'SERVER_URL', "\"${properties.getProperty('SERVER_URL')}\""
         buildConfigField 'String', 'USERNAME', "\"${properties.getProperty('USERNAME')}\""
@@ -46,5 +44,5 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.lzy.net:okgo:3.0.4'
-    implementation 'com.blankj:utilcode:1.21.2'
+    implementation 'com.blankj:utilcode:1.22.7'
 }

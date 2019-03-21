@@ -2,10 +2,12 @@ package com.niles.caigousdkdemo;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.EncryptUtils;
@@ -22,10 +24,31 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
+    EditText mURLEditView;
+    EditText mUsernameView;
+    EditText mPasswordView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mURLEditView = findViewById(R.id.et_url);
+        mUsernameView = findViewById(R.id.et_username);
+        mPasswordView = findViewById(R.id.et_password);
+
+        mURLEditView.setText(BuildConfig.SERVER_URL);
+        mUsernameView.setText(BuildConfig.USERNAME);
+        mPasswordView.setText(BuildConfig.USERNAME);
+    }
+
+    public void openPanDian(View view) {
+        final String protocol = mURLEditView.getText().toString();
+        final String username = mUsernameView.getText().toString();
+        final String deviceId = Installation.id(this);
+
+        Intent intent = createPanDianIntent(protocol, username, deviceId);
+        openPanDian(intent);
     }
 
     public void openCaiGou(View view) {
@@ -55,16 +78,28 @@ public class MainActivity extends AppCompatActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        Intent intent = createIntent5(protocol, username, response.body(), time, deviceId);
+                        Intent intent = createCaigouIntent(protocol, username, response.body(), time, deviceId);
                         openCaiGou(intent);
                     }
 
                     @Override
                     public void onError(Response<String> response) {
-                        Intent intent = createIntent5(protocol, username, response.body(), time, deviceId);
+                        Intent intent = createCaigouIntent(protocol, username, response.body(), time, deviceId);
                         openCaiGou(intent);
                     }
                 });
+    }
+
+    private void openPanDian(Intent intent) {
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "请安装盘点App", Toast.LENGTH_SHORT).show();
+
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.pgyer.com/zzpandian"));
+            startActivity(webIntent);
+        }
     }
 
     private void openCaiGou(Intent intent) {
@@ -80,7 +115,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Intent createIntent5(String protocol, String user, String loginInfo, String time, String deviceId) {
+    private Intent createPanDianIntent(String protocol, String user, String deviceId) {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("user", user);
+            jsonObject.put("device_id", deviceId);
+            jsonObject.put("protocol", protocol);
+            final Intent intent = new Intent();
+            intent.setComponent(new ComponentName("com.zhu.pandian", "com.zhu.ec.mainmenu.MainActivity"));
+            intent.putExtra("JSON_RESULT", jsonObject.toString());
+            return intent;
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Intent createCaigouIntent(String protocol, String user, String loginInfo, String time, String deviceId) {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("user", user);
