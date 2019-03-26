@@ -5,12 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.blankj.utilcode.util.EncryptUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -19,10 +18,11 @@ import com.lzy.okgo.model.Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     EditText mURLEditView;
     EditText mUsernameView;
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         mURLEditView.setText(BuildConfig.SERVER_URL);
         mUsernameView.setText(BuildConfig.USERNAME);
-        mPasswordView.setText(BuildConfig.USERNAME);
+        mPasswordView.setText(BuildConfig.PASSWORD);
     }
 
     public void openPanDian(View view) {
@@ -52,21 +52,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openCaiGou(View view) {
-        final String protocol = BuildConfig.SERVER_URL;
-        final String username = BuildConfig.USERNAME;
-        final String password;
-        try {
-            password = Base64.encodeToString(
-                    EncryptUtils.encryptAES(
-                            BuildConfig.PASSWORD.getBytes("UTF-8"),
-                            BuildConfig.AES_PASSWORD.getBytes("UTF-8"),
-                            "AES/CBC/PKCS5Padding",
-                            BuildConfig.AES_IV.getBytes("UTF-8")
-                    ),
-                    Base64.NO_WRAP);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        final String protocol = mURLEditView.getText().toString();
+        final String username = mUsernameView.getText().toString();
+        final String password = mPasswordView.getText().toString();
         final String time = TimeUtils.date2String(new Date());
         final String deviceId = Installation.id(this);
         OkGo.<String>post(protocol + "/auth/login")
@@ -78,13 +66,13 @@ public class MainActivity extends AppCompatActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        Intent intent = createCaigouIntent(protocol, username, response.body(), time, deviceId);
+                        Intent intent = createCaiGouIntent(protocol, username, response.body(), time, deviceId);
                         openCaiGou(intent);
                     }
 
                     @Override
                     public void onError(Response<String> response) {
-                        Intent intent = createCaigouIntent(protocol, username, response.body(), time, deviceId);
+                        Intent intent = createCaiGouIntent(protocol, username, response.body(), time, deviceId);
                         openCaiGou(intent);
                     }
                 });
@@ -103,15 +91,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openCaiGou(Intent intent) {
-        if (intent == null) {
-            Toast.makeText(this, "没有安装采购App(-1)", Toast.LENGTH_SHORT).show();
-            return;
-        }
         try {
             startActivity(intent);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "没有安装采购App(-2)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请安装采购App", Toast.LENGTH_SHORT).show();
+
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.pgyer.com/zzcaigou"));
+            startActivity(webIntent);
         }
     }
 
@@ -130,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Intent createCaigouIntent(String protocol, String user, String loginInfo, String time, String deviceId) {
+    private Intent createCaiGouIntent(String protocol, String user, String loginInfo, String time, String deviceId) {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("user", user);
@@ -138,13 +125,19 @@ public class MainActivity extends AppCompatActivity {
             jsonObject.put("time", time);
             jsonObject.put("device_id", deviceId);
             jsonObject.put("protocol", protocol);
+
             final Intent intent = new Intent();
             intent.setComponent(new ComponentName("com.zhu.procurement", "com.zhu.ec.mainmenu.MainActivity"));
-            intent.putExtra("JSON_RESULT", jsonObject.toString());
+
+            String jsonStr = jsonObject.toString();
+
+            intent.putExtra("JSON_RESULT", jsonStr);
+
+            Log.e(TAG, jsonStr);
+
             return intent;
         } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
     }
 }

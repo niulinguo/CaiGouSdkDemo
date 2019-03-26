@@ -43,4 +43,11 @@
         android:text="打开盘点"
         tools:ignore="HardcodedText"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="openCaiGou"
+        android:text="打开采购"
+        tools:ignore="HardcodedText"/>
+
 </LinearLayout>
